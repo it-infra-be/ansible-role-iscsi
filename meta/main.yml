@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: iscsi
+  namespace: it_infra_be
+  author: Karon Pante <karon.pante@it-infra.be>
+  description: Install and configure iSCSI targets
+  company: IT Infra
+  license: MIT
+  min_ansible_version: '2.15'
+  platforms:
+    - name: EL
+      versions:
+        - '9'
+  galaxy_tags:
+    - iscsi
+
+dependencies: []
+...

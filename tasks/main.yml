@@ -1,0 +1,38 @@
+---
+- name: Prepare firewall facts
+  ansible.builtin.set_fact:
+    __iscsi_zone: >
+      {{ __iscsi_zone | default([{'zone': 'iscsi', 'state': 'present'}]) +
+      [{'zone': 'iscsi', 'interface': item, 'state': 'enabled'}] }}
+  loop: '{{ iscsi_interfaces }}'
+
+- name: Configure firewall for iSCSI interfaces (drop incoming connections)
+  ansible.builtin.import_role: # noqa: var-naming[no-role-prefix]
+    name: linux-system-roles.firewall
+  vars:
+    firewall: '{{ __iscsi_zone }}'
+  when: __iscsi_zone is defined
+
+- name: Install iSCSI initiator utils
+  ansible.builtin.dnf:
+    name: iscsi-initiator-utils
+    state: present
+
+- name: Discover iSCSI targets
+  community.general.open_iscsi:
+    portal: '{{ iscsi_portal }}'
+    show_nodes: true
+    discover: true
+
+- name: Login to the specified iSCSI targets
+  community.general.open_iscsi:
+    login: true
+    node_auth: CHAP
+    node_user: '{{ item.user }}'
+    node_pass: '{{ item.password }}'
+    target: '{{ item.target }}'
+    auto_node_startup: true
+  loop: '{{ iscsi_targets }}'
+  loop_control:
+    label: '{{ item.target }}'
+...
