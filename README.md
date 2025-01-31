@@ -9,9 +9,13 @@ incoming new connections, allowing only outgoing connections.
 
 This role has to be executed as user 'root'.
 
-Following external roles are used:
+### Linux System Roles
 
-  * [linux-system-roles.firewall](https://github.com/linux-system-roles/firewall)
+This role requires fedora.linux_system_roles >= 1.94.0, which can be installed with the command:
+
+```shell
+ansible-galaxy collection install fedora.linux_system_roles
+```
 
 ## Variables
 
