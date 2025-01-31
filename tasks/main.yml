@@ -8,7 +8,7 @@
 
 - name: Configure firewall for iSCSI interfaces (drop incoming connections)
   ansible.builtin.import_role: # noqa: var-naming[no-role-prefix]
-    name: linux-system-roles.firewall
+    name: fedora.linux_system_roles.firewall
   vars:
     firewall: '{{ __iscsi_zone }}'
   when: __iscsi_zone is defined
